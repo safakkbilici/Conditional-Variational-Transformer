@@ -1,3 +1,6 @@
+from tqdm.auto import auto
+from strsimpy.levenshtein import Levenshtein
+
 def is_cheating(generated_sentence, real_sentence, gram = 1, check_levenshtein = False, print_it = False):
     generated_sentence = generated_sentence.lower()
     real_sentence = real_sentence.lower()
