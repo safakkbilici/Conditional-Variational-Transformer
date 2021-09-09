@@ -43,13 +43,15 @@ class MultiHeadAttention(nn.Module):
 
     def forward(self, q, k, v, mask=None):
 
-        d_k, d_v, n_head = self.d_k, self.d_v, self.n_head
-        sz_b, len_q, len_k, len_v = q.size(0), q.size(1), k.size(1), v.size(1)
+        batch_size = q.size(0)
+        len_q = q.size(1)
+        len_k = k.size(1)
+        len_v = v.size(1)
         residual = q
 
-        q = self.w_qs(q).view(sz_b, len_q, n_head, d_k)
-        k = self.w_ks(k).view(sz_b, len_k, n_head, d_k)
-        v = self.w_vs(v).view(sz_b, len_v, n_head, d_v)
+        q = self.w_qs(q).view(batch_size, len_q, self.n_head, self.d_k)
+        k = self.w_ks(k).view(batch_size, len_k, self.n_head, self.d_k)
+        v = self.w_vs(v).view(batch_size, len_v, self.n_head, self.d_v)
 
         q, k, v = q.transpose(1, 2), k.transpose(1, 2), v.transpose(1, 2)
 
@@ -98,8 +100,8 @@ class PositionalEncoding(nn.Module):
             return [position / np.power(10000, 2 * (hid_j // 2) / d_hid) for hid_j in range(d_hid)]
 
         sinusoid_table = np.array([get_position_angle_vec(pos_i) for pos_i in range(n_position)])
-        sinusoid_table[:, 0::2] = np.sin(sinusoid_table[:, 0::2])  # dim 2i
-        sinusoid_table[:, 1::2] = np.cos(sinusoid_table[:, 1::2])  # dim 2i+1
+        sinusoid_table[:, 0::2] = np.sin(sinusoid_table[:, 0::2])
+        sinusoid_table[:, 1::2] = np.cos(sinusoid_table[:, 1::2])
         return torch.FloatTensor(sinusoid_table).unsqueeze(0)
 
     def forward(self, x):
