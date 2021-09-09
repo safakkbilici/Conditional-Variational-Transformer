@@ -94,15 +94,15 @@ class BasicTokenizer():
             vocab.dump(self.special_tokens, special_f)
 
         params = {
-            "unk_token" = self.unk_token,
-            "start_token" = self.start_token,
-            "end_token" = self.end_token,
-            "pad_token" = self.pad_token,
-            "cased" = self.cased,
-            "unk_token_id" = self.unk_token_id,
-            "start_token_id" = self.start_token_id,
-            "end_token_id" = self.end_token_id,
-            "pad_token_id" = self.pad_token_id,
+            "unk_token": self.unk_token,
+            "start_token": self.start_token,
+            "end_token": self.end_token,
+            "pad_token": self.pad_token,
+            "cased": self.cased,
+            "unk_token_id": self.unk_token_id,
+            "start_token_id": self.start_token_id,
+            "end_token_id": self.end_token_id,
+            "pad_token_id": self.pad_token_id,
         }
         with open(directory + "params.json", "w") as params_f:
             vocab.dump(params, special_f)
