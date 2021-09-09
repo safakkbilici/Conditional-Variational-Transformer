@@ -71,7 +71,7 @@ class BasicTokenizer():
             self.remove_special_tokens(decoded)
         return decoded
     
-    def remove_special_tokens(self, tokens, from_str = "False"):
+    def remove_special_tokens(self, tokens, from_str = False):
         if not from_str:
             for token in self.special_tokens:
                 tokens = list(filter((token).__ne__, tokens))
