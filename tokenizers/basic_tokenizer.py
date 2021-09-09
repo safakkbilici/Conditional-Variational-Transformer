@@ -63,15 +63,15 @@ class BasicTokenizer():
                 encoded.append(self.pad_token_id)
         return encoded
     
-    def decode(self, token_ids, remove_special_characters = False):
+    def decode(self, token_ids, remove_special_tokens = False):
         decoded = []
         for token_id in token_ids:
             decoded.append(self.i2w[token_id])
-        if remove_special_characters:
-            self.remove_special_characters(decoded)
+        if remove_special_tokens:
+            self.remove_special_tokens(decoded)
         return decoded
     
-    def remove_special_characters(self, tokens, from_str = "False"):
+    def remove_special_tokens(self, tokens, from_str = "False"):
         if not from_str:
             for token in self.special_tokens:
                 tokens = list(filter((token).__ne__, tokens))
@@ -88,10 +88,10 @@ class BasicTokenizer():
         if directory[-1] != "/":
             directory += "/"
         with open(directory + "vocab.json", "w") as vocab_f:
-            vocab.dump(self.w2i, vocab_f)
+            json.dump(self.w2i, vocab_f)
 
         with open(directory + "special_tokens.json", "w") as special_f:
-            vocab.dump(self.special_tokens, special_f)
+            json.dump(self.special_tokens, special_f)
 
         params = {
             "unk_token": self.unk_token,
@@ -105,7 +105,7 @@ class BasicTokenizer():
             "pad_token_id": self.pad_token_id,
         }
         with open(directory + "params.json", "w") as params_f:
-            vocab.dump(params, special_f)
+            json.dump(params, special_f)
 
     def load(self, directory):
         if directory[-1] != "/":
