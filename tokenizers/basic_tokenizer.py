@@ -1,3 +1,5 @@
+import json
+
 class BasicTokenizer():
     def __init__(self, 
                  unk_token = "[UNK]", 
@@ -25,7 +27,7 @@ class BasicTokenizer():
             self.unk_token: self.unk_token_id
         }
         self.special_tokens = list(self.w2i.keys())
-        self.vocab_len = len(self.w2i)
+        
         
     def fit(self, df):
         df_feature = getattr(df, self.feature_name)
@@ -40,6 +42,7 @@ class BasicTokenizer():
                         self.w2i[word] = id_count
                     id_count +=1
         self.i2w = {v: k for k, v in self.w2i.items()}
+        self.vocab_len = len(self.w2i)
         
     def encode(self,sentence, max_len = 512):
         if self.cased:
@@ -79,3 +82,52 @@ class BasicTokenizer():
                 tokens = list(filter((token).__ne__, tokens))
             tokens = ' '.join(tokens)
         return tokens
+
+
+    def save(self, directory):
+        if directory[-1] != "/":
+            directory += "/"
+        with open(directory + "vocab.json", "w") as vocab_f:
+            vocab.dump(self.w2i, vocab_f)
+
+        with open(directory + "special_tokens.json", "w") as special_f:
+            vocab.dump(self.special_tokens, special_f)
+
+        params = {
+            "unk_token" = self.unk_token,
+            "start_token" = self.start_token,
+            "end_token" = self.end_token,
+            "pad_token" = self.pad_token,
+            "cased" = self.cased,
+            "unk_token_id" = self.unk_token_id,
+            "start_token_id" = self.start_token_id,
+            "end_token_id" = self.end_token_id,
+            "pad_token_id" = self.pad_token_id,
+        }
+        with open(directory + "params.json", "w") as params_f:
+            vocab.dump(params, special_f)
+
+    def load(self, directory):
+        if directory[-1] != "/":
+            directory += "/"
+
+        with open(directory + "vocab.json", "r") as vocab_f:
+            self.w2i = json.load(vocab_f)
+
+        self.i2w = {v: k for k, v in self.w2i.items()}
+
+        with open(directory + "special_tokens.json", "r") as special_f:
+            self.special_tokens = json.load(special_f)
+
+        with open(directory + "params.json", "r") as params_f:
+            params = json.load(params_f)
+
+        self.unk_token = params["unk_token"]
+        self.start_token = params["start_token"]
+        self.end_token = params["end_token"]
+        self.pad_token = params["pad_token"]
+        self.cased = params["cased"]
+        self.unk_token_id = params["unk_token_id"]
+        self.start_token_id = params["start_token_id"]
+        self.end_token_id = params["end_token_id"]
+        self.pad_token_id = params["pad_token_id"]
