@@ -2,8 +2,10 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+
 from models.layers import *
 from models.encoder_decoder import *
+from models.masking import *
 
 class Transformer(nn.Module):
     def __init__(
