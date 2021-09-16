@@ -35,7 +35,7 @@ def cheating(df_generated, df_real, feature_name, gram, check_levenshtein = Fals
     with tqdm(total = len(df_generated) * len(df_real)) as tt:
         for idx, generated_sentence in enumerate(generated_sentences):
             local_count = 0
-            for real_sentece in df_imdb.sentence:
+            for real_sentece in real_sentences:
                 a = is_cheating(generated_sentence, real_sentece, gram, print_it)
                 general_count += a
                 local_count += a
@@ -45,3 +45,4 @@ def cheating(df_generated, df_real, feature_name, gram, check_levenshtein = Fals
             report += f"found {local_count} matching for n-gram: {gram} "
             report += f"-> len: {len(generated_sentence.split())}"
             print(report)
+    print(f"Average is {general_count / (idx+1)}")
