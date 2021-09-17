@@ -7,7 +7,7 @@ from models.layers import *
 from models.encoder_decoder import *
 from models.masking import *
 
-class Transformer(nn.Module):
+class CVAETransformer(nn.Module):
     def __init__(
             self, n_src_vocab, n_trg_vocab, src_pad_idx, trg_pad_idx,
             d_word_vec=512, d_model=512, d_inner=2048,
