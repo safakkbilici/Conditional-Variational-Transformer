@@ -2,6 +2,7 @@ from models.variational_transformer import CVAETransformer
 from models.trainer import train
 from tokenizer.basic_tokenizer import BasicTokenizer
 from tokenizer.bpe import BytePairTokenizer
+from utils.dataloaders import get_dataloaders
 
 import torch
 import torch.nn as nn
@@ -40,6 +41,17 @@ def main(args):
         n_position = args.max_seq_len + 1
     )
 
+    train_dataloader, test_dataloader = get_dataloaders(
+        df_train = args.df_train,
+        df_test = args.df_test,
+        tokenizer = tokenizer,
+        text_feature_name = args.df_sentence_name,
+        target_feature_name = args.df_sentence_name,
+        batch_size = args.batch_size,
+        max_len = args.max_seq_len,
+        preprocess = args.preprocess
+    )
+
     
     optimizer = torch.optim.Adam(model.parameters(), lr = args.initial_learning_rate)
     scheduler = None
@@ -62,7 +74,9 @@ def main(args):
         "scheduler": scheduler,
         "criterion": criterion,
         "device": device,
-        "args": args
+        "args": args,
+        "train_dataloader": train_dataloader,
+        "test_dataloader": test_dataloader
         
     }
 
@@ -72,6 +86,46 @@ def main(args):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--df_train",
+                        "-train",
+                        help="pandas dataframe for training",
+                        type = str,
+    )
+
+    parser.add_argument("--df_test",
+                        "-test",
+                        help="pandas dataframe for test",
+                        type = str,
+    )
+
+    parser.add_argument("--batch_size",
+                        "-bs",
+                        help="batch size",
+                        type = int,
+                        default = 32
+    )
+
+    parser.add_argument("--df_sentence_name",
+                        "-dsn",
+                        help="sentence feature name for dataframe",
+                        type = str,
+                        default = "sentence"
+    )
+
+    parser.add_argument("--df_target_name",
+                        "-dtn",
+                        help="target feature name for dataframe",
+                        type = str,
+                        default = "target"
+    )
+
+    parser.add_argument("--preprocess",
+                        "-prc",
+                        help="preprocess",
+                        type = bool,
+                        default = False
+    )
+    
     parser.add_argument("--epochs",
                         "-e",
                         help="number of epochs",
