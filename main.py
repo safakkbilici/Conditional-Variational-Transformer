@@ -41,6 +41,9 @@ def main(args):
         n_position = args.max_seq_len + 1
     )
 
+    total_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
+    print(f"Total number of trainable parameters: {total_param}")
+
     train_dataloader, test_dataloader = get_dataloaders(
         df_train = args.df_train,
         df_test = args.df_test,
