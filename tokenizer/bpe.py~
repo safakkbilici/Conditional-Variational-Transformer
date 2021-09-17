@@ -1,5 +1,0 @@
-import tokenizers
-from tokenizers.pre_tokenizers import Whitespace
-from tokenizers import Tokenizer
-from tokenizers.trainers import BpeTrainer
-from tokenizers.models import BPE
