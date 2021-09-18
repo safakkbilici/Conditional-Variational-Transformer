@@ -48,6 +48,8 @@ def main(args):
         
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
     parser.add_argument("--tokenizer",
                         "-tok",
                         help="-space- for space based tokenizer, -bpe- for Byte Pair Encoding",
