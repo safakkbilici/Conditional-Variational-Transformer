@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from utils.model_utils import *
 
 
-def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer):
+def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, latent_size):
 
     total = len(test_dataloader)
     
@@ -24,12 +24,12 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer):
                 src_seq = patch_src(src, tokenizer.pad_token_id)
                 trg_seq, gold = map(lambda x: x.to(device), patch_trg(trg, tokenizer.pad_token_id))
 
-                prior = sample_from_prior(batch_size, args.latent_size, device)
+                prior = sample_from_prior(batch_size, latent_size, device)
                 prior[:,0] = label
 
                 pred, kl_loss = model(src_seq.long(), trg_seq.long(), prior, debug = False)
 
-                loss, n_correct, n_word = cal_performance(pred, gold, args.tokenizer.pad_token_id, smoothing=False)
+                loss, n_correct, n_word = cal_performance(pred, gold, tokenizer.pad_token_id, smoothing=False)
 
                 if args.posterior_collapse:
                     kl_weight = kl_anneal_function(

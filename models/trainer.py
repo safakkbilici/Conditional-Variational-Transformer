@@ -78,7 +78,8 @@ def train(**params):
                 test_dataloader = test_dataloader,
                 stepp = stepp,
                 args = args,
-                tokenizer = tokenizer
+                tokenizer = tokenizer,
+                latent_size
             )
             
             print(str(epoch)+"-" * 30)
