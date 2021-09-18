@@ -4,6 +4,7 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from utils.model_utils import *
+from models.eval import evaluate
 
 
 def train(**params):
@@ -13,12 +14,15 @@ def train(**params):
     criterion = params["criterion"]
     scheduler = params["scheduler"]
     train_dataloader = params["train_dataloader"]
+    test_dataloader = params["train_dataloader"]
 
     args = params["args"]
 
     kl = []
     nll = []
     returns = {}
+
+    total = len(train_dataloader) * args.epochs
     
     model = model.to(device)
     with tqdm(total = total) as tt:
@@ -67,10 +71,22 @@ def train(**params):
 
             loss_per_word = nll_total_loss/n_word_total
             accuracy = n_word_correct/n_word_total
+            test_acc, test_nll, test_kl = evaluate(
+                model = model,
+                device = device,
+                criterion = criterion,
+                test_dataloader = test_dataloader,
+                stepp = stepp,
+                args = args
+            )
+            
             print(str(epoch)+"-" * 30)
-            print(f"accuracy: {accuracy}")
-            print(f"nll_total_loss: {loss_per_word}")
-            print(f"kl_total_loss: {kl_total_loss}")
+            print(f"Train Accuracy: {accuracy}")
+            print(f"Train Negative Log Likelihood: {loss_per_word}")
+            print(f"Train KL-Divergence: {kl_total_loss}")
+            print(f"Test Accuracy: {test_accuracy}")
+            print(f"Test Negative Log Likelihood: {test_nll}")
+            print(f"Test KL-Divergence: {test_kl}")
 
             kl.append(kl_total_loss)
             nll.append(loss_per_word)
