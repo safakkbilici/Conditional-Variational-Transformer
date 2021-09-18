@@ -28,8 +28,7 @@ def get_dataloaders(
         df_test_sentence = df_test_sentence.apply(denoise_text)
 
 
-    ids = []
-    masks = []
+    data = []
     labels = []
     for sentence, target in zip(df_train_sentence, df_train_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
@@ -43,8 +42,7 @@ def get_dataloaders(
     train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
 
     
-    ids = []
-    masks = []
+    data = []
     labels = []
     for sentence, target in zip(df_test_sentence, df_test_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
