@@ -49,7 +49,7 @@ def main(args):
         df_test = args.df_test,
         tokenizer = tokenizer,
         text_feature_name = args.df_sentence_name,
-        target_feature_name = args.df_sentence_name,
+        target_feature_name = args.df_target_name,
         batch_size = args.batch_size,
         max_len = args.max_seq_len,
         preprocess = args.preprocess
