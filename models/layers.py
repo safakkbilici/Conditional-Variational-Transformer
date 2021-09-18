@@ -60,7 +60,7 @@ class MultiHeadAttention(nn.Module):
             mask = mask.unsqueeze(1)
 
         q, attn = self.attention(q, k, v, mask=mask)
-        q = q.transpose(1, 2).contiguous().view(sz_b, len_q, -1)
+        q = q.transpose(1, 2).contiguous().view(batch_size, len_q, -1)
         q = self.dropout(self.fc(q))
         q += residual
 

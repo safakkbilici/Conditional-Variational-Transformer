@@ -46,11 +46,10 @@ def train(**params):
                 prior[:,0] = label
 
                 optimizer.zero_grad()
-
                 pred, kl_loss = model(src_seq.long(), trg_seq.long(), prior, debug = False)
-                loss, n_correct, n_word = cal_performance(pred, gold, args.tokenizer.pad_token_id, smoothing=True)
+                loss, n_correct, n_word = cal_performance(pred, gold, tokenizer.pad_token_id, smoothing=True)
 
-                if args.posterior_collapse:
+                if args.posterior_collapse == "true":
                     kl_weight = kl_anneal_function(
                         args.anneal_function,
                         stepp,
