@@ -105,7 +105,7 @@ class BasicTokenizer():
             "pad_token_id": self.pad_token_id,
         }
         with open(directory + "params.json", "w") as params_f:
-            json.dump(params, special_f)
+            json.dump(params, params_f)
 
     def load(self, directory):
         if directory[-1] != "/":
