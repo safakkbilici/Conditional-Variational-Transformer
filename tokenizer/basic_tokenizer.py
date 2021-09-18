@@ -57,6 +57,8 @@ class BasicTokenizer():
                 encoded.append(self.unk_token_id)
             else:
                 encoded.append(self.w2i[word])
+            if s_len == max_len-1:
+                break
         encoded.append(self.end_token_id)
         if max_len != None:
             for _ in range(s_len, max_len):
