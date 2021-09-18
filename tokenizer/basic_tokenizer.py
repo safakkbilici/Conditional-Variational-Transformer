@@ -35,13 +35,14 @@ class BasicTokenizer():
         for sentence in df_feature:
             splitted = sentence.split()
             for word in splitted:
+                if self.cased == False:
+                    word = word.lower()
                 if word not in self.w2i.keys():
-                    if self.cased == False:
-                        self.w2i[word.lower()] = id_count
-                    else:
-                        self.w2i[word] = id_count
+                    self.w2i[word] = id_count
+                    print(word, id_count)
                     id_count +=1
         self.i2w = {v: k for k, v in self.w2i.items()}
+        print(len(self.w2i))
         self.vocab_len = len(self.w2i)
         
     def encode(self,sentence, max_len = 512):
@@ -57,7 +58,7 @@ class BasicTokenizer():
                 encoded.append(self.unk_token_id)
             else:
                 encoded.append(self.w2i[word])
-            if s_len == max_len-1:
+            if max_len != None and s_len == max_len-1:
                 break
         encoded.append(self.end_token_id)
         if max_len != None:
