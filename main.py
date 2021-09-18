@@ -79,8 +79,8 @@ def main(args):
         "device": device,
         "args": args,
         "train_dataloader": train_dataloader,
-        "test_dataloader": test_dataloader
-        
+        "test_dataloader": test_dataloader,
+        "tokenizer": tokenizer
     }
 
     history = train(**params)
