@@ -42,7 +42,7 @@ def main(args):
         tokenizer.train(data)
         tokenizer.save("./tokenizer", "vocab")
 
-        os.remove(".tokenizer/data.txt")
+        os.remove("./tokenizer/data.txt")
     else:
         raise NotImplementedError()
         
