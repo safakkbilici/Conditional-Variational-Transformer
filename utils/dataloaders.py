@@ -15,7 +15,7 @@ def get_dataloaders(
         preprocess = False):
     
     df_train = pd.read_csv(df_train)
-    df_train = pd.read_csv(df_test)
+    df_test = pd.read_csv(df_test)
 
     df_train_sentence = getattr(df_train, text_feature_name)
     df_train_target = getattr(df_train, target_feature_name)
