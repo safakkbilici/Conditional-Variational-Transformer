@@ -87,7 +87,7 @@ def main(args):
     torch.save(history["model"].state_dict(), "model.pt")
     torch.save(history["optimizer"].state_dict(), "optimizer.pt")
     if history["scheduler"] != None:
-        torch.save(history[""].state_dict(), "scheduler.pt")
+        torch.save(history["scheduler"].state_dict(), "scheduler.pt")
 
 
 if __name__ == "__main__":
