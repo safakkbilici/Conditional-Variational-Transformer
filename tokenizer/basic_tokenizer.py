@@ -50,7 +50,7 @@ class BasicTokenizer():
         s_len = 2
         encoded = []
         encoded.append(self.start_token_id)
-        splitted = denoise_text(sentence).split()
+        splitted = sentence.split()
         for word in splitted:
             s_len+=1
             if word not in self.w2i:
