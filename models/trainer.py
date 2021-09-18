@@ -15,6 +15,7 @@ def train(**params):
     scheduler = params["scheduler"]
     train_dataloader = params["train_dataloader"]
     test_dataloader = params["train_dataloader"]
+    tokenizer = params["tokenizer"]
 
     args = params["args"]
 
@@ -77,7 +78,8 @@ def train(**params):
                 criterion = criterion,
                 test_dataloader = test_dataloader,
                 stepp = stepp,
-                args = args
+                args = args,
+                tokenizer = tokenizer
             )
             
             print(str(epoch)+"-" * 30)
