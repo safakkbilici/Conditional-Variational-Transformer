@@ -10,8 +10,9 @@ def main(args):
     df = pd.read_csv(args.dataframe)
     sentence_feature = getattr(df, args.feature_name)
     
-    if args.preprocess:
+    if args.preprocess == "true":
         sentence_feature = sentence_feature.apply(denoise_text)
+        df = pd.DataFrame(sentence_feature)
         
     if args.tokenizer == "space":
         tokenizer = BasicTokenizer(
@@ -19,7 +20,7 @@ def main(args):
             start_token = args.start_token,
             end_token = args.end_token,
             pad_token = args.pad_token,
-            cased = args.cased,
+            cased = True if args.cased == "true" else False,
             feature_name = args.feature_name
         )
 
@@ -95,8 +96,8 @@ if __name__ == "__main__":
     parser.add_argument("--cased",
                         "-c",
                         help="cased or uncased",
-                        type = bool,
-                        default = False
+                        type = str,
+                        default = "false"
     )
 
     parser.add_argument("--feature_name",
@@ -116,8 +117,8 @@ if __name__ == "__main__":
     parser.add_argument("--preprocess",
                         "-pp",
                         help="preprocess",
-                        type = bool,
-                        default = False
+                        type = str,
+                        default = "false"
     )
     
     args = parser.parse_args()

@@ -19,14 +19,14 @@ def main(args):
         tokenizer.load("./tokenizer", "vocab")
     else:
         raise NotImplementedError()
-    
+    print(len(tokenizer.w2i))
     model = CVAETransformer(
         n_src_vocab = len(tokenizer.w2i),
         n_trg_vocab = len(tokenizer.w2i),
         src_pad_idx = tokenizer.pad_token_id,
         trg_pad_idx = tokenizer.pad_token_id,
-        trg_emb_prj_weight_sharing = args.trg_proj_weight_sharing,
-        emb_src_trg_weight_sharing = args.emb_weight_sharing,
+        trg_emb_prj_weight_sharing = True if args.trg_proj_weight_sharing == "true" else False,
+        emb_src_trg_weight_sharing = True if args.emb_weight_sharing == "true" else False,
         d_k = args.d_k,
         d_v = args.d_v,
         d_model = args.d_model,
@@ -43,7 +43,7 @@ def main(args):
 
     total_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total number of trainable parameters: {total_param}")
-
+    print(args.cuda)
     train_dataloader, test_dataloader = get_dataloaders(
         df_train = args.df_train,
         df_test = args.df_test,
@@ -52,19 +52,19 @@ def main(args):
         target_feature_name = args.df_target_name,
         batch_size = args.batch_size,
         max_len = args.max_seq_len,
-        preprocess = args.preprocess
+        preprocess = True if args.preprocess=="true" else False
     )
 
     
     optimizer = torch.optim.Adam(model.parameters(), lr = args.initial_learning_rate)
     scheduler = None
     criterion = nn.CrossEntropyLoss()
-    if args.cuda:
+    if args.cuda == "true":
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    elif args.cuda == False:
+    else:
         device = torch.device("cpu")
     
-    if args.scheduler:
+    if args.scheduler == "true":
         scheduler = torch.optim.lr_scheduler.StepLR(
             optimizer,
             step_size = args.scheduler_step_size,
@@ -129,8 +129,8 @@ if __name__ == "__main__":
     parser.add_argument("--preprocess",
                         "-prc",
                         help="preprocess",
-                        type = bool,
-                        default = False
+                        type = str,
+                        default = "false"
     )
     
     parser.add_argument("--epochs",
@@ -157,15 +157,15 @@ if __name__ == "__main__":
     parser.add_argument("--scheduler",
                         "-sch",
                         help="learning rate scheduler: torch.optim.lr_scheduler.StepLR",
-                        type = bool,
-                        default = False
+                        type = str,
+                        default = "false"
     )
 
     parser.add_argument("--cuda",
                         "-cuda",
                         help="device",
-                        type = bool,
-                        default = True
+                        type = str,
+                        default = "true"
     )
 
     parser.add_argument("--scheduler_step_size",
@@ -192,8 +192,8 @@ if __name__ == "__main__":
     parser.add_argument("--posterior_collapse",
                         "-pc",
                         help = "posterior collapse helper",
-                        type = bool,
-                        default = True
+                        type = str,
+                        default = "false"
     )
 
     parser.add_argument("--anneal_function",
@@ -283,15 +283,15 @@ if __name__ == "__main__":
     parser.add_argument("--emb_weight_sharing",
                         "-ews",
                         help="weight sharing for embedding layers of encoder and decoder",
-                        type = bool,
-                        default = True
+                        type = str,
+                        default = "false"
     )
 
     parser.add_argument("--trg_proj_weight_sharing",
                         "-tpws",
                         help="projection layer and decoder embedding layer weight sharing",
-                        type = bool,
-                        default = True
+                        type = str,
+                        default = "false"
     )
 
     args = parser.parse_args()
