@@ -4,7 +4,7 @@ import numpy as np
 from tqdm.auto import tqdm
 
 from utils.model_utils import *
-from models.eval import evaluate
+from models.eval import evaluate, generate
 
 
 def train(**params):
@@ -26,7 +26,7 @@ def train(**params):
     total = len(train_dataloader) * args.epochs
     
     model = model.to(device)
-    with tqdm(total = total) as tt:
+    with tqdm(total = total, desc='Training round') as tt:
         stepp = 0
         for epoch in range(args.epochs):
             nll_total_loss, kl_total_loss, n_word_total, n_word_correct = 0, 0, 0, 0
@@ -71,6 +71,7 @@ def train(**params):
 
             loss_per_word = nll_total_loss/n_word_total
             accuracy = n_word_correct/n_word_total
+            
             test_acc, test_nll, test_kl = evaluate(
                 model = model,
                 device = device,
@@ -81,6 +82,16 @@ def train(**params):
                 tokenizer = tokenizer,
                 latent_size
             )
+
+            samples = generate(
+                model = model,
+                device = device,
+                tokenizer = tokenizer,
+                latent_size = args.latent_size,
+                n_classes = args.n_classes,
+                n_samples_per_class = args.n_generate,
+                generate_len = args.generate_len
+            )
             
             print(str(epoch)+"-" * 30)
             print(f"Train Accuracy: {accuracy}")
@@ -89,6 +100,8 @@ def train(**params):
             print(f"Test Accuracy: {test_accuracy}")
             print(f"Test Negative Log Likelihood: {test_nll}")
             print(f"Test KL-Divergence: {test_kl}")
+            for key, value in samples.items():
+                print(f"-{key}: {value}")
 
             kl.append(kl_total_loss)
             nll.append(loss_per_word)

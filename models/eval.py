@@ -1,16 +1,18 @@
 import torch
 import torch.nn as nn
 import numpy as np
+from collections import defaultdict
 from tqdm.auto import tqdm
 
 from utils.model_utils import *
+from models.masking import get_subsequent_mask
 
 
 def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, latent_size):
 
     total = len(test_dataloader)
     
-    with tqdm(total = total) as ee:
+    with tqdm(total = total, leave=False, desc='Validation round') as ee:
         with torch.inference_mode():
             nll_total_loss, kl_total_loss, n_word_total, n_word_correct = 0, 0, 0, 0
             for step, batch in enumerate(test_dataloader):
@@ -53,3 +55,37 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
         accuracy = n_word_correct/n_word_total
 
         return accuracy, loss_per_word, kl_total_loss
+
+
+
+def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
+    samples = defaultdict(list)
+    total = n_classes * n_samples_per_class * generate_len
+    with tqdm(total = total, leave=False, desc='Generation round'):
+        for i in range(n_classes):
+            samples[str(i)] = []
+            for j in range(n_samples_per_class):
+                prior = sample_from_prior(1, latent_size, device)
+                prior[:,0] = i
+                trg = [tokenizer.start_token_id]
+                trg_seq = torch.Tensor(trg)[None, :].long().to(device)
+            
+                with torch.inference_mode():
+                    for step in range(2, generate_len):
+                        trg_mask = get_subsequent_mask(trg_seq)
+                        dec_output = model.generate(trg_seq, trg_mask, prior, None)
+                        
+                        gen_seq = F.softmax(transformer.trg_word_prj(dec_output), dim=-1).squeeze(0).squeeze(0)
+
+                        try:
+                            max_prob = gen_seq[-1,:].argmax(dim = -1)
+                        except:
+                            max_prob = gen_seq.argmax(dim = -1)
+                            
+                        trg.append(max_prob.item())
+                        trg_seq = torch.Tensor(trg)[None, :].long().to(device)
+
+                generated_sentence = ' '.join(tokenizer.decode(trg, remove_special_tokens=True))
+                samples[str(i)].append(generated_sentence)
+
+    return samples
