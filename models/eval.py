@@ -13,7 +13,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
     total = len(test_dataloader)
     
     with tqdm(total = total, leave=False, desc='Validation round') as ee:
-        with torch.inference_mode():
+        with torch.no_grad():
             nll_total_loss, kl_total_loss, n_word_total, n_word_correct = 0, 0, 0, 0
             for step, batch in enumerate(test_dataloader):
                 model.eval()
@@ -70,7 +70,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                 trg = [tokenizer.start_token_id]
                 trg_seq = torch.Tensor(trg)[None, :].long().to(device)
             
-                with torch.inference_mode():
+                with torch.no_grad():
                     for step in range(2, generate_len):
                         trg_mask = get_subsequent_mask(trg_seq)
                         dec_output = model.generate(trg_seq, trg_mask, prior, None)
