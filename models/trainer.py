@@ -97,7 +97,7 @@ def train(**params):
                 print(f"Train Accuracy: {accuracy}")
                 print(f"Train Negative Log Likelihood: {loss_per_word}")
                 print(f"Train KL-Divergence: {kl_total_loss}")
-                print(f"Test Accuracy: {test_accuracy}")
+                print(f"Test Accuracy: {test_acc}")
                 print(f"Test Negative Log Likelihood: {test_nll}")
                 print(f"Test KL-Divergence: {test_kl}")
                 for key, value in samples.items():
