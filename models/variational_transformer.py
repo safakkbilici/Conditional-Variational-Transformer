@@ -71,6 +71,27 @@ class CVAETransformer(nn.Module):
         if emb_src_trg_weight_sharing:
             self.encoder.src_word_emb.weight = self.decoder.trg_word_emb.weight
 
+        self.serialize = {
+            'n_src_vocab': n_src_vocab,
+            'n_trg_vocab': n_trg_vocab,
+            'src_pad_idx': src_pad_idx ,
+            'trg_pad_idx': trg_pad_idx,
+            'd_word_vec': d_word_vec,
+            'd_model': d_model,
+            'd_inner': d_inner,
+            'n_layers': n_layers,
+            'n_head': n_head,
+            'd_k': d_k,
+            'd_v': d_v,
+            'dropout': dropout,
+            'n_position': n_position,
+            'trg_emb_prj_weight_sharing': trg_emb_prj_weight_sharing,
+            'emb_src_trg_weight_sharing': emb_src_trg_weight_sharing,
+            'scale_emb_or_prj': scale_emb_or_prj,
+            'enc_max_seq_len': enc_max_seq_len,
+            'latent_size': latent_size
+        }
+
 
     def forward(self, src_seq, trg_seq, prior, debug = False):
 

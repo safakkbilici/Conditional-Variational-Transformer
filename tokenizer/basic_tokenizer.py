@@ -46,7 +46,7 @@ class BasicTokenizer():
         self.vocab_len = len(self.w2i)
         
     def encode(self,sentence, max_len = 512):
-        if self.cased:
+        if self.cased == False:
             sentence = sentence.lower()
         s_len = 2
         encoded = []

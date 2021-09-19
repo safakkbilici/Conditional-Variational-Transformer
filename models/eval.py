@@ -71,6 +71,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                 trg_seq = torch.Tensor(trg)[None, :].long().to(device)
             
                 with torch.no_grad():
+                    model.eval()
                     for step in range(2, generate_len):
                         trg_mask = get_subsequent_mask(trg_seq)
                         dec_output = model.generate(trg_seq, trg_mask, prior, None)
