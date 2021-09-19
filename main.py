@@ -42,7 +42,8 @@ def main(args):
         n_position = args.max_seq_len + 1
     )
 
-    model_params = vars(model)
+    model_params = model.serialize
+    print(model_params)
     with open('model_params.json', 'w') as fp:
         json.dump(model_params, fp)
     
