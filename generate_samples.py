@@ -10,6 +10,8 @@ from tokenizer.bpe import BytePairTokenizer
 
 import argparse
 
+import pandas as pd
+
 def main(args):
     if args.tokenizer == "space":
         tokenizer = BasicTokenizer()
@@ -41,6 +43,10 @@ def main(args):
         n_samples_per_class = args.n_generate,
         generate_len = args.generate_len
     )
+
+    df_generated = pd.DataFrame(samples)
+    print(df_generated)
+    df_generated.to_csv("generated.csv", index = False)
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
