@@ -69,6 +69,7 @@ def train(**params):
                 nll_total_loss += loss.item()
                 tt.update()
 
+            if (epoch+1) % args.evaluate_per_epoch == 0:
                 loss_per_word = nll_total_loss/(n_word_total+1)
                 accuracy = n_word_correct/(n_word_total+1)
             
@@ -103,8 +104,8 @@ def train(**params):
                 for key, value in samples.items():
                     print(f"-{key}: {value}")
 
-            kl.append(kl_total_loss)
-            nll.append(loss_per_word)
+                kl.append(kl_total_loss)
+                nll.append(loss_per_word)
 
             if scheduler != None:
                 scheduler.step()
