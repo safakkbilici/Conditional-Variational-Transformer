@@ -69,39 +69,39 @@ def train(**params):
                 nll_total_loss += loss.item()
                 tt.update()
 
-            loss_per_word = nll_total_loss/n_word_total
-            accuracy = n_word_correct/n_word_total
+                loss_per_word = nll_total_loss/(n_word_total+1)
+                accuracy = n_word_correct/(n_word_total+1)
             
-            test_acc, test_nll, test_kl = evaluate(
-                model = model,
-                device = device,
-                criterion = criterion,
-                test_dataloader = test_dataloader,
-                stepp = stepp,
-                args = args,
-                tokenizer = tokenizer,
-                latent_size = args.latent_size
-            )
+                test_acc, test_nll, test_kl = evaluate(
+                    model = model,
+                    device = device,
+                    criterion = criterion,
+                    test_dataloader = test_dataloader,
+                    stepp = stepp,
+                    args = args,
+                    tokenizer = tokenizer,
+                    latent_size = args.latent_size
+                )
 
-            samples = generate(
-                model = model,
-                device = device,
-                tokenizer = tokenizer,
-                latent_size = args.latent_size,
-                n_classes = args.n_classes,
-                n_samples_per_class = args.n_generate,
-                generate_len = args.generate_len
-            )
+                samples = generate(
+                    model = model,
+                    device = device,
+                    tokenizer = tokenizer,
+                    latent_size = args.latent_size,
+                    n_classes = args.n_classes,
+                    n_samples_per_class = args.n_generate,
+                    generate_len = args.generate_len
+                )
             
-            print(str(epoch)+"-" * 30)
-            print(f"Train Accuracy: {accuracy}")
-            print(f"Train Negative Log Likelihood: {loss_per_word}")
-            print(f"Train KL-Divergence: {kl_total_loss}")
-            print(f"Test Accuracy: {test_accuracy}")
-            print(f"Test Negative Log Likelihood: {test_nll}")
-            print(f"Test KL-Divergence: {test_kl}")
-            for key, value in samples.items():
-                print(f"-{key}: {value}")
+                print(str(epoch)+"-" * 30)
+                print(f"Train Accuracy: {accuracy}")
+                print(f"Train Negative Log Likelihood: {loss_per_word}")
+                print(f"Train KL-Divergence: {kl_total_loss}")
+                print(f"Test Accuracy: {test_accuracy}")
+                print(f"Test Negative Log Likelihood: {test_nll}")
+                print(f"Test KL-Divergence: {test_kl}")
+                for key, value in samples.items():
+                    print(f"-{key}: {value}")
 
             kl.append(kl_total_loss)
             nll.append(loss_per_word)

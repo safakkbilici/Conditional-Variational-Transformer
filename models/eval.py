@@ -12,7 +12,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
     total = len(test_dataloader)
     
-    with tqdm(total = total, leave=False, desc='Validation round') as ee:
+    with tqdm(total = total, leave=False, desc='Validation round', position = 0) as ee:
         with torch.no_grad():
             nll_total_loss, kl_total_loss, n_word_total, n_word_correct = 0, 0, 0, 0
             for step, batch in enumerate(test_dataloader):
@@ -61,7 +61,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
     samples = defaultdict(list)
     total = n_classes * n_samples_per_class * generate_len
-    with tqdm(total = total, leave=False, desc='Generation round'):
+    with tqdm(total = total, leave=False, desc='Generation round', position = 0) as gg:
         for i in range(n_classes):
             samples[str(i)] = []
             for j in range(n_samples_per_class):
@@ -84,6 +84,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                             
                         trg.append(max_prob.item())
                         trg_seq = torch.Tensor(trg)[None, :].long().to(device)
+                        gg.update()
 
                 generated_sentence = ' '.join(tokenizer.decode(trg, remove_special_tokens=True))
                 samples[str(i)].append(generated_sentence)
