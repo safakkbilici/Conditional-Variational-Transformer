@@ -19,7 +19,7 @@ def main(args):
         tokenizer.load("./tokenizer", "vocab")
     else:
         raise NotImplementedError()
-    print(len(tokenizer.w2i))
+    
     model = CVAETransformer(
         n_src_vocab = len(tokenizer.w2i),
         n_trg_vocab = len(tokenizer.w2i),
@@ -43,7 +43,8 @@ def main(args):
 
     total_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total number of trainable parameters: {total_param}")
-    print(args.cuda)
+    print(f"CUDA: {args.cuda}")
+    
     train_dataloader, test_dataloader = get_dataloaders(
         df_train = args.df_train,
         df_test = args.df_test,
@@ -292,6 +293,27 @@ if __name__ == "__main__":
                         help="projection layer and decoder embedding layer weight sharing",
                         type = str,
                         default = "false"
+    )
+
+    parser.add_argument("--n_classes",
+                        "-ncl",
+                        help="number of classes for generating samples",
+                        type = int,
+                        default = 2
+    )
+
+    parser.add_argument("--n_generate",
+                        "-ngen",
+                        help="number of generated samples per class",
+                        type = int,
+                        default = 1
+    )
+
+    parser.add_argument("--generate_len",
+                        "-ngen",
+                        help="max len for generation",
+                        type = int,
+                        default = 100
     )
 
     args = parser.parse_args()
