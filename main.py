@@ -64,6 +64,8 @@ def main(args):
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     else:
         device = torch.device("cpu")
+
+    print(f"Device: {device}")
     
     if args.scheduler == "true":
         scheduler = torch.optim.lr_scheduler.StepLR(
@@ -194,7 +196,7 @@ if __name__ == "__main__":
                         "-pc",
                         help = "posterior collapse helper",
                         type = str,
-                        default = "false"
+                        default = "true"
     )
 
     parser.add_argument("--anneal_function",
