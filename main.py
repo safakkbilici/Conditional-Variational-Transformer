@@ -7,6 +7,7 @@ from utils.dataloaders import get_dataloaders
 import torch
 import torch.nn as nn
 import argparse
+import json
 
 
 def main(args):
@@ -40,6 +41,11 @@ def main(args):
         latent_size = args.latent_size,
         n_position = args.max_seq_len + 1
     )
+
+    model_params = vars(model)
+    with open('model_params.json', 'w') as fp:
+        json.dump(model_params, fp)
+    
 
     total_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total number of trainable parameters: {total_param}")
