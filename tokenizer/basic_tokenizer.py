@@ -39,7 +39,7 @@ class BasicTokenizer():
                     word = word.lower()
                 if word not in self.w2i.keys():
                     self.w2i[word] = id_count
-                    print(word, id_count)
+                    #print(word, id_count)
                     id_count +=1
         self.i2w = {v: k for k, v in self.w2i.items()}
         print(len(self.w2i))
