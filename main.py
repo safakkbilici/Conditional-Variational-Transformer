@@ -310,7 +310,7 @@ if __name__ == "__main__":
     )
 
     parser.add_argument("--generate_len",
-                        "-ngen",
+                        "-ngenl",
                         help="max len for generation",
                         type = int,
                         default = 100
