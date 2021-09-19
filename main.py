@@ -316,5 +316,12 @@ if __name__ == "__main__":
                         default = 100
     )
 
+    parser.add_argument("--evaluate_per_epoch",
+                        "-epe",
+                        help="evaluating at nth epoch",
+                        type = int,
+                        default = 2
+    )
+
     args = parser.parse_args()
     main(args)
