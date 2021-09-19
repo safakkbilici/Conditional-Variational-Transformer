@@ -75,7 +75,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                         trg_mask = get_subsequent_mask(trg_seq)
                         dec_output = model.generate(trg_seq, trg_mask, prior, None)
                         
-                        gen_seq = F.softmax(transformer.trg_word_prj(dec_output), dim=-1).squeeze(0).squeeze(0)
+                        gen_seq = F.softmax(model.trg_word_prj(dec_output), dim=-1).squeeze(0).squeeze(0)
 
                         try:
                             max_prob = gen_seq[-1,:].argmax(dim = -1)
