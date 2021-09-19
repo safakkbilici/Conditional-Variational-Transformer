@@ -80,7 +80,7 @@ def train(**params):
                 stepp = stepp,
                 args = args,
                 tokenizer = tokenizer,
-                latent_size
+                latent_size = args.latent_size
             )
 
             samples = generate(
