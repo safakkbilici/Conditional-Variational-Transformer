@@ -25,6 +25,7 @@ def main(args):
         with open(args.model_params, 'r') as fp:
             model_params = json.load(fp)
         model = CVAETransformer(**model_params)
+        print(f"Model is loaded from {args.model} and {args.model_params}")
         model.load_state_dict(torch.load(args.model))
 
 
