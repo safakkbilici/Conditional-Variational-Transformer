@@ -73,7 +73,7 @@ def train(**params):
                 loss_per_word = nll_total_loss/(n_word_total+1)
                 accuracy = n_word_correct/(n_word_total+1)
             
-                test_acc, test_nll, test_kl = evaluate(
+                test_acc, test_nll, test_kl, test_perp = evaluate(
                     model = model,
                     device = device,
                     criterion = criterion,
@@ -101,6 +101,7 @@ def train(**params):
                 print(f"Test Accuracy: {test_acc}")
                 print(f"Test Negative Log Likelihood: {test_nll}")
                 print(f"Test KL-Divergence: {test_kl}")
+                print(f"Test Perplexity: {test_perp}")
                 for key, value in samples.items():
                     print(f"-{key}: {value}")
 

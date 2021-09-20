@@ -14,7 +14,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
     
     with tqdm(total = total, leave=False, desc='Validation round', position = 0) as ee:
         with torch.no_grad():
-            nll_total_loss, kl_total_loss, n_word_total, n_word_correct = 0, 0, 0, 0
+            nll_total_loss, kl_total_loss, n_word_total, n_word_correct, perp_total = 0, 0, 0, 0, 0
             for step, batch in enumerate(test_dataloader):
                 model.eval()
 
@@ -33,6 +33,8 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
                 loss, n_correct, n_word = cal_performance(pred, gold, tokenizer.pad_token_id, smoothing=False)
 
+                perplexity = torch.exp(loss)
+
                 if args.posterior_collapse:
                     kl_weight = kl_anneal_function(
                         args.anneal_function,
@@ -49,12 +51,15 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
                 kl_total_loss += kl_loss.item()
                 nll_total_loss += loss.item()
+                perp_total += perplexity.item()
+                
                 ee.update()
 
         loss_per_word = nll_total_loss/n_word_total
         accuracy = n_word_correct/n_word_total
+        perp_total = perp_total / len(test_dataloader)
 
-        return accuracy, loss_per_word, kl_total_loss
+        return accuracy, loss_per_word, kl_total_loss, perp_total
 
 
 
