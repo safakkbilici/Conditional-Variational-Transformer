@@ -61,6 +61,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
     samples = defaultdict(list)
     total = n_classes * n_samples_per_class * generate_len
+    model = model.to(device)
     with tqdm(total = total, leave=False, desc='Generation round', position = 0) as gg:
         for i in range(n_classes):
             samples[str(i)] = []
