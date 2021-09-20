@@ -12,7 +12,6 @@ def get_yelp_as_csv():
 
     train_df.to_csv("yelp_train.csv", index = False)
     test_df.to_csv("yelp_test.csv", index = False)
-    val_df.to_csv("yelp_val.csv", index = False)
 
 
 get_yelp_as_csv()
