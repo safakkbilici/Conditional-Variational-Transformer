@@ -20,33 +20,39 @@ def main(args):
         tokenizer.load("./tokenizer", "vocab")
     else:
         raise NotImplementedError()
-    
-    model = CVAETransformer(
-        n_src_vocab = len(tokenizer.w2i),
-        n_trg_vocab = len(tokenizer.w2i),
-        src_pad_idx = tokenizer.pad_token_id,
-        trg_pad_idx = tokenizer.pad_token_id,
-        trg_emb_prj_weight_sharing = True if args.trg_proj_weight_sharing == "true" else False,
-        emb_src_trg_weight_sharing = True if args.emb_weight_sharing == "true" else False,
-        d_k = args.d_k,
-        d_v = args.d_v,
-        d_model = args.d_model,
-        d_word_vec = args.d_word,
-        d_inner = args.d_inner,
-        n_layers = args.n_layers,
-        n_head = args.n_heads,
-        dropout = args.dropout,
-        scale_emb_or_prj = 'prj',
-        enc_max_seq_len = args.max_seq_len,
-        latent_size = args.latent_size,
-        n_position = args.max_seq_len + 1
-    )
 
-    model_params = model.serialize
-    print(model_params)
-    with open('model_params.json', 'w') as fp:
-        json.dump(model_params, fp)
-    
+    if args.model_params != "none" and args.model != "none":
+        with open(args.model_params, 'r') as fp:
+            model_params = json.load(fp)
+        model = CVAETransformer(**model_params)
+        model.load_state_dict(torch.load(args.model))
+
+
+    else:
+        model = CVAETransformer(
+            n_src_vocab = len(tokenizer.w2i),
+            n_trg_vocab = len(tokenizer.w2i),
+            src_pad_idx = tokenizer.pad_token_id,
+            trg_pad_idx = tokenizer.pad_token_id,
+            trg_emb_prj_weight_sharing = True if args.trg_proj_weight_sharing == "true" else False,
+            emb_src_trg_weight_sharing = True if args.emb_weight_sharing == "true" else False,
+            d_k = args.d_k,
+            d_v = args.d_v,
+            d_model = args.d_model,
+            d_word_vec = args.d_word,
+            d_inner = args.d_inner,
+            n_layers = args.n_layers,
+            n_head = args.n_heads,
+            dropout = args.dropout,
+            scale_emb_or_prj = 'prj',
+            enc_max_seq_len = args.max_seq_len,
+            latent_size = args.latent_size,
+            n_position = args.max_seq_len + 1
+        )
+
+        model_params = model.serialize
+        with open('model_params.json', 'w') as fp:
+            json.dump(model_params, fp)
 
     total_param = sum(p.numel() for p in model.parameters() if p.requires_grad)
     print(f"Total number of trainable parameters: {total_param}")
@@ -63,8 +69,10 @@ def main(args):
         preprocess = True if args.preprocess=="true" else False
     )
 
-    
     optimizer = torch.optim.Adam(model.parameters(), lr = args.initial_learning_rate)
+    if args.optimizer != "none":
+        optimizer.load_state_dict(args.optimizer)
+    
     scheduler = None
     criterion = nn.CrossEntropyLoss()
     if args.cuda == "true":
@@ -80,6 +88,9 @@ def main(args):
             step_size = args.scheduler_step_size,
             gamma = args.scheduler_gamma
         )
+
+        if args.load_scheduler != "none":
+            scheduler.load_state_dict(args.load_scheduler)
         
     params = {
         "model": model,
@@ -330,6 +341,34 @@ if __name__ == "__main__":
                         help="evaluating at nth epoch",
                         type = int,
                         default = 2
+    )
+
+    parser.add_argument("--model",
+                        "-ml",
+                        help="model checkpoint to load",
+                        type = str,
+                        default = "none"
+    )
+
+    parser.add_argument("--optimizer",
+                        "-opt",
+                        help="optimizer checkpoint to load",
+                        type = str,
+                        default = "none"
+    )
+
+    parser.add_argument("--model_params",
+                        "-mlp",
+                        help="model attributes to load",
+                        type = str,
+                        default = "none"
+    )
+
+    parser.add_argument("--load_scheduler",
+                        "-lsch",
+                        help="scheduler checkpoint to load",
+                        type = str,
+                        default = "none"
     )
 
     args = parser.parse_args()
