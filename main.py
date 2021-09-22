@@ -31,8 +31,8 @@ def main(args):
 
     else:
         model = CVAETransformer(
-            n_src_vocab = len(tokenizer.w2i),
-            n_trg_vocab = len(tokenizer.w2i),
+            n_src_vocab = tokenizer.vocab_size,
+            n_trg_vocab = tokenizer.vocab_size,
             src_pad_idx = tokenizer.pad_token_id,
             trg_pad_idx = tokenizer.pad_token_id,
             trg_emb_prj_weight_sharing = True if args.trg_proj_weight_sharing == "true" else False,
