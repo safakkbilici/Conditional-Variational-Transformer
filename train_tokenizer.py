@@ -30,7 +30,7 @@ def main(args):
     elif args.tokenizer == "bpe":
         data = '\n'.join(sentence_feature.tolist())
         with open("./tokenizer/data.txt", "w") as f:
-            f.wirte(data)
+            f.write(data)
 
         tokenizer = BytePairTokenizer(
             unk_token = args.unk_token,
