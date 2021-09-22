@@ -30,6 +30,8 @@ class BytePairTokenizer():
         self.end_token_id = self.tokenizer.token_to_id(self.end_token)
         self.pad_token_id = self.tokenizer.token_to_id(self.pad_token)
         self.unk_token_id = self.tokenizer.token_to_id(self.unk_token)
+        self.vocab_size = self.tokenizer.get_vocab_size()
+        print(self.vocab_size)
 
 
     def save(self, directory, name):
@@ -70,6 +72,8 @@ class BytePairTokenizer():
         self.end_token_id = self.special_tokens["end_token_id"]
         self.pad_token_id = self.special_tokens["pad_token_id"]
         self.unk_token_id = self.special_tokens["unk_token_id"]
+
+        self.vocab_size = self.tokenizer.get_vocab_size()
 
 
     def encode(self, sentence, max_len = 512):

@@ -43,7 +43,7 @@ class BasicTokenizer():
                     id_count +=1
         self.i2w = {v: k for k, v in self.w2i.items()}
         print(len(self.w2i))
-        self.vocab_len = len(self.w2i)
+        self.vocab_size = len(self.w2i)
         
     def encode(self,sentence, max_len = 512):
         if self.cased == False:
@@ -134,3 +134,4 @@ class BasicTokenizer():
         self.start_token_id = params["start_token_id"]
         self.end_token_id = params["end_token_id"]
         self.pad_token_id = params["pad_token_id"]
+        self.vocab_size = len(self.w2i)
