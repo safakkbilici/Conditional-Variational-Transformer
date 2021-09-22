@@ -40,7 +40,7 @@ def main(args):
             vocab_size = args.vocab_size
         )
 
-        tokenizer.train(data)
+        tokenizer.train("./tokenizer/data.txt")
         tokenizer.save("./tokenizer", "vocab")
 
         os.remove("./tokenizer/data.txt")
