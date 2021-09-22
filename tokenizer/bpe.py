@@ -72,9 +72,7 @@ class BytePairTokenizer():
         self.unk_token_id = self.special_tokens["unk_token_id"]
 
 
-    def encode(self, sentence, max_len = 512, preprocess = None):
-        if preprocess != None:
-            sentence = preprocess(sentence)
+    def encode(self, sentence, max_len = 512):
 
         encoded = []
         encoded.append(self.start_token_id)
@@ -84,8 +82,11 @@ class BytePairTokenizer():
         encoded.extend(encoded_sentence)
 
         encoded.append(self.end_token_id)
+        if len(encoded) > max_len:
+            encoded = encoded[:max_len -1]
+            encoded.append(self.end_token_id)
 
-        if max_len != None:
+        elif max_len != None:
             for _ in range(len(encoded), max_len):
                 encoded.append(self.pad_token_id)
 
