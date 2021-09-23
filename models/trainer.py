@@ -93,7 +93,13 @@ def train(**params):
                     n_samples_per_class = args.n_generate,
                     generate_len = args.generate_len
                 )
-            
+
+                torch.save(model.state_dict(), "model.pt")
+                torch.save(optimizer.state_dict(), "optimizer.pt")
+                if scheduler != None:
+                    torch.save(scheduler.state_dict(), "scheduler.pt")
+                    
+
                 print(str(epoch)+"-" * 30)
                 print(f"Train Accuracy: {accuracy}")
                 print(f"Train Negative Log Likelihood: {loss_per_word}")
