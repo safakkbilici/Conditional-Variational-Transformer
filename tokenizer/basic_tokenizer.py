@@ -6,6 +6,7 @@ class BasicTokenizer():
                  start_token = "[START]",
                  end_token = "[END]",
                  pad_token = "[PAD]",
+                 mask_token = "[MASK]"
                  cased = True,
                  feature_name = "sentence"):
         
@@ -13,9 +14,11 @@ class BasicTokenizer():
         self.start_token = start_token
         self.end_token = end_token
         self.pad_token = pad_token
+        self.mask_token = mask_token
         self.feature_name = feature_name
         self.cased = cased
-        
+
+        self.mask_token_id = 4
         self.unk_token_id = 3
         self.start_token_id = 2
         self.end_token_id = 1
@@ -25,13 +28,14 @@ class BasicTokenizer():
             self.end_token: self.end_token_id,
             self.pad_token: self.pad_token_id,
             self.unk_token: self.unk_token_id
+            self.mask_token: self.mask_token_id
         }
         self.special_tokens = list(self.w2i.keys())
         
         
     def fit(self, df):
         df_feature = getattr(df, self.feature_name)
-        id_count = 4
+        id_count = 5
         for sentence in df_feature:
             splitted = sentence.split()
             for word in splitted:
@@ -101,11 +105,13 @@ class BasicTokenizer():
             "start_token": self.start_token,
             "end_token": self.end_token,
             "pad_token": self.pad_token,
+            "mask_token": self.mask_token
             "cased": self.cased,
             "unk_token_id": self.unk_token_id,
             "start_token_id": self.start_token_id,
             "end_token_id": self.end_token_id,
             "pad_token_id": self.pad_token_id,
+            "mask_token_id": self.mask_token_id
         }
         with open(directory + "params.json", "w") as params_f:
             json.dump(params, params_f)
@@ -129,9 +135,11 @@ class BasicTokenizer():
         self.start_token = params["start_token"]
         self.end_token = params["end_token"]
         self.pad_token = params["pad_token"]
+        self.mask_token = params["mask_token"]
         self.cased = params["cased"]
         self.unk_token_id = params["unk_token_id"]
         self.start_token_id = params["start_token_id"]
         self.end_token_id = params["end_token_id"]
         self.pad_token_id = params["pad_token_id"]
+        self.mask_token_id = params["mask_token_id"]
         self.vocab_size = len(self.w2i)
