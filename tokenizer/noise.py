@@ -45,7 +45,7 @@ def delete(tokens, mask_id, prob = 15):
     return tokens
     
     
-def rotate(tokens):
+def rotate(tokens, mask_id, prob = 15):
     token_len = len(tokens)
     new_list = []
     token_idx_list = list(range(token_len))
@@ -56,7 +56,15 @@ def rotate(tokens):
     return new_list
 
 
-def add_noise(tokens, start_id, end_id, pad_id):
+def add_noise(tokens, end_id, pad_id, prob = 15):
+
+    max_len = len(tokens)
+    start_id = tokens[0]
+    end_idx = tokens.index(end_id)
+    tokens = tokens[1:end_idx]
+
+    new_tokens = []
+    
     implemented = [
         mask,
         rotate,
@@ -72,6 +80,11 @@ def add_noise(tokens, start_id, end_id, pad_id):
     ).tolist()
     selected_perms = []
     for i in perms_choose:
-        selected_perms.append(perms[i])
+        tokens = perms[i](tokens, mask_id, prob)
 
-    print(selected_perms)
+    new_tokens.extend(start_id)
+    new_tokens.extend(tokens)
+    new_tokens.extend(end_id)
+    for i in range(len(new_tokens), max_len):
+        new_tokens.extend(pad_id)
+    return new_tokens
