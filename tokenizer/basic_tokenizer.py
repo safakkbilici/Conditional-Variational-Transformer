@@ -27,7 +27,7 @@ class BasicTokenizer():
             self.start_token: self.start_token_id,
             self.end_token: self.end_token_id,
             self.pad_token: self.pad_token_id,
-            self.unk_token: self.unk_token_id
+            self.unk_token: self.unk_token_id,
             self.mask_token: self.mask_token_id
         }
         self.special_tokens = list(self.w2i.keys())
