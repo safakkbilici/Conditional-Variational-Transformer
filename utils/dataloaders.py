@@ -2,6 +2,7 @@ import torch
 import pandas as pd
 from torch.utils.data import RandomSampler, SequentialSampler, DataLoader, TensorDataset
 from utils.preprocessing import denoise_text
+from tokenizer.noise import add_noise
 
 
 def get_dataloaders(
@@ -12,7 +13,8 @@ def get_dataloaders(
         target_feature_name = "target",
         batch_size = 32,
         max_len = 200,
-        preprocess = False):
+        preprocess = False,
+        noise = True):
     
     df_train = pd.read_csv(df_train)
     df_test = pd.read_csv(df_test)
@@ -32,6 +34,8 @@ def get_dataloaders(
     labels = []
     for sentence, target in zip(df_train_sentence, df_train_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
+        if noise:
+            encoded = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
         data.append(encoded)
         labels.append(float(target))
 
@@ -46,6 +50,8 @@ def get_dataloaders(
     labels = []
     for sentence, target in zip(df_test_sentence, df_test_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
+        if noise:
+            encoded = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
         data.append(encoded)
         labels.append(float(target))
 
