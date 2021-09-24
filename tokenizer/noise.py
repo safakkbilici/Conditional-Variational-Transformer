@@ -24,7 +24,7 @@ def mask(tokens, mask_id, prob = 15):
     for i in sampled_pre_mask_tokens:
         tokens[i] = mask_id
 
-    return mask
+    return tokens
     
 
 def delete(tokens, mask_id, prob = 15):
@@ -37,12 +37,13 @@ def delete(tokens, mask_id, prob = 15):
         size = n_mask,
         replace = False
     ).tolist()
-
     
-    for i in sampled_pre_mask_tokens:
-        tokens.remove(tokens[i])
-
-    return tokens
+    new_tokens = []
+    for i in range(token_len):
+        if i not in sampled_pre_mask_tokens:
+            new_tokens.append(tokens[i])
+        
+    return new_tokens
     
     
 def rotate(tokens, mask_id, prob = 15):
@@ -56,7 +57,7 @@ def rotate(tokens, mask_id, prob = 15):
     return new_list
 
 
-def add_noise(tokens, end_id, pad_id, prob = 15):
+def add_noise(tokens, mask_id, end_id, pad_id, prob = 15):
 
     max_len = len(tokens)
     start_id = tokens[0]
@@ -78,13 +79,21 @@ def add_noise(tokens, end_id, pad_id, prob = 15):
         size = 1,
         replace = False
     ).tolist()
-    selected_perms = []
-    for i in perms_choose:
-        tokens = perms[i](tokens, mask_id, prob)
 
-    new_tokens.extend(start_id)
+    for i in perms_choose:
+        if perms[i]:
+            for f in perms[i]:
+                tokens = f(tokens, mask_id, prob)
+
+    new_tokens.append(start_id)
     new_tokens.extend(tokens)
-    new_tokens.extend(end_id)
+    new_tokens.append(end_id)
     for i in range(len(new_tokens), max_len):
-        new_tokens.extend(pad_id)
+        new_tokens.append(pad_id)
     return new_tokens
+
+
+#tokens = [1,5,7,8,9,5,6,77,88,99,55,4,22,456,2,0,0,0,0,0]
+#new_tokens = add_noise(tokens, -1, 2, 0, 15)
+#print(tokens)
+#print(new_tokens)
