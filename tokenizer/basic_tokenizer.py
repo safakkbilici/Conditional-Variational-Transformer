@@ -6,7 +6,7 @@ class BasicTokenizer():
                  start_token = "[START]",
                  end_token = "[END]",
                  pad_token = "[PAD]",
-                 mask_token = "[MASK]"
+                 mask_token = "[MASK]",
                  cased = True,
                  feature_name = "sentence"):
         
