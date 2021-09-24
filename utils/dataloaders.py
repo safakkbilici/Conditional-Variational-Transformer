@@ -31,33 +31,47 @@ def get_dataloaders(
 
 
     data = []
+    noised = []
     labels = []
     for sentence, target in zip(df_train_sentence, df_train_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
         if noise:
-            encoded = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
+            encoded1 = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
+            noised.append(encoded1)
         data.append(encoded)
         labels.append(float(target))
 
     data = torch.Tensor(data)
+    if noise:
+        noised = torch.Tensor(noised)
     labels = torch.Tensor(labels)
-    train_data = TensorDataset(data, data, labels)
+    if noise:
+        train_data = TensorDataset(noised, data, labels)
+    else:
+        train_data = TensorDataset(data, data, labels)
     train_sampler = RandomSampler(train_data)
     train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=batch_size)
 
     
     data = []
     labels = []
+    noised = []
     for sentence, target in zip(df_test_sentence, df_test_target):
         encoded = tokenizer.encode(sentence, max_len = max_len)
         if noise:
-            encoded = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
+            encoded1 = add_noise(encoded, tokenizer.mask_token_id, tokenizer.end_token_id, tokenizer.pad_token_id)
+            noised.append(encoded1)
         data.append(encoded)
         labels.append(float(target))
 
     data = torch.Tensor(data)
+    if noise:
+        noised = torch.Tensor(noised)
     labels = torch.Tensor(labels)
-    test_data = TensorDataset(data, data, labels)
+    if noise:
+        test_data = TensorDataset(noised, data, labels)
+    else:
+        test_data = TensorDataset(data, data, labels)
     test_sampler = SequentialSampler(test_data)
     test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
 
