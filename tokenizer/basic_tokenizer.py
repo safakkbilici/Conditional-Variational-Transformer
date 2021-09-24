@@ -105,7 +105,7 @@ class BasicTokenizer():
             "start_token": self.start_token,
             "end_token": self.end_token,
             "pad_token": self.pad_token,
-            "mask_token": self.mask_token
+            "mask_token": self.mask_token,
             "cased": self.cased,
             "unk_token_id": self.unk_token_id,
             "start_token_id": self.start_token_id,
