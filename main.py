@@ -67,7 +67,8 @@ def main(args):
         target_feature_name = args.df_target_name,
         batch_size = args.batch_size,
         max_len = args.max_seq_len,
-        preprocess = True if args.preprocess=="true" else False
+        preprocess = True if args.preprocess=="true" else False,
+        noise = True if args.noise == "true" else False
     )
 
     optimizer = torch.optim.Adam(model.parameters(), lr = args.initial_learning_rate)
@@ -370,6 +371,13 @@ if __name__ == "__main__":
                         help="scheduler checkpoint to load",
                         type = str,
                         default = "none"
+    )
+
+    parser.add_argument("--noise",
+                        "-no",
+                        help="noised input to decoder",
+                        type = str,
+                        default = "false"
     )
 
     args = parser.parse_args()
