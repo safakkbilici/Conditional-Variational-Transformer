@@ -109,7 +109,10 @@ def train(**params):
                 print(f"Test KL-Divergence: {test_kl}")
                 print(f"Test Perplexity: {test_perp}")
                 for key, value in samples.items():
-                    print(f"-{key}: {value}")
+                    print(f"{key}:")
+                    for gt in value:
+                        print("+"+gt)
+                    #print(f"-{key}: {value}")
 
                 kl.append(kl_total_loss)
                 nll.append(loss_per_word)
