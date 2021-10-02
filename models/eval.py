@@ -63,12 +63,12 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
 def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
     total = num_classes * num_samples * (n_len - 2)
-    generated = {str(i): [] for i in range(num_classes)}
+    generated = {str(i): [] for i in range(n_classes)}
 
     with tqdm(total = total, leave=False, desc='Generation round', position = 0) as gen:
 
-        for i in range(num_classes):
-            for j in range(num_samples):
+        for i in range(n_classes):
+            for j in range(n_samples_per_class):
                 prior = sample_from_prior(1, latent_size, device)
                 prior[:,0] = i
                 trg = [tokenizer.start_token_id]
