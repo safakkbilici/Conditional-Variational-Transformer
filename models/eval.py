@@ -62,7 +62,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
         return accuracy, loss_per_word, kl_total_loss, perp_total
 
 def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
-    total = num_classes * num_samples * (n_len - 2)
+    total = n_classes * n_samples_per_class * (generate_len - 2)
     generated = {str(i): [] for i in range(n_classes)}
 
     with tqdm(total = total, leave=False, desc='Generation round', position = 0) as gen:
@@ -74,7 +74,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                 trg = [tokenizer.start_token_id]
                 trg_seq = torch.Tensor(trg)[None, :].long().to(device)
                 with torch.no_grad():
-                    for step in range(2, 100):
+                    for step in range(2, generate_len):
                         trg_mask = get_subsequent_mask(trg_seq)
                         dec_output = model.generate(trg_seq, trg_mask, prior, None)
                         gen_seq = F.softmax(model.trg_word_prj(dec_output), dim=-1).squeeze(0).squeeze(0)
