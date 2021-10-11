@@ -68,6 +68,7 @@ def main(args):
         batch_size = args.batch_size,
         max_len = args.max_seq_len,
         preprocess = True if args.preprocess=="true" else False,
+        preprocess_type = args.preprocess_type
         noise = True if args.noise == "true" else False
     )
 
@@ -155,6 +156,14 @@ if __name__ == "__main__":
                         type = str,
                         default = "false"
     )
+
+    parser.add_argument("--preprocess_type",
+                        "-prct",
+                        help="type of preprocessing",
+                        type = str,
+                        default = "denoise"
+    )
+    
     
     parser.add_argument("--epochs",
                         "-e",

@@ -5,13 +5,15 @@ from utils.preprocessing import denoise_text
 import argparse
 import pandas as pd
 import os
+import functools
 
 def main(args):
     df = pd.read_csv(args.dataframe)
     sentence_feature = getattr(df, args.feature_name)
     
     if args.preprocess == "true":
-        sentence_feature = sentence_feature.apply(denoise_text)
+        preprocessor = functools.partial(denoise_text, t = args.preprocess_type)
+        sentence_feature = sentence_feature.apply(preprocessor)
         df = pd.DataFrame(sentence_feature)
         
     if args.tokenizer == "space":
@@ -119,6 +121,13 @@ if __name__ == "__main__":
                         help="preprocess",
                         type = str,
                         default = "false"
+    )
+
+    parser.add_argument("--preprocess_type",
+                        "-prct",
+                        help="type of preprocessing",
+                        type = str,
+                        default = "denoise"
     )
     
     args = parser.parse_args()

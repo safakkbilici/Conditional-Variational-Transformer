@@ -3,6 +3,7 @@ import pandas as pd
 from torch.utils.data import RandomSampler, SequentialSampler, DataLoader, TensorDataset
 from utils.preprocessing import denoise_text
 from tokenizer.noise import add_noise
+import functools
 
 
 def get_dataloaders(
@@ -14,6 +15,7 @@ def get_dataloaders(
         batch_size = 32,
         max_len = 200,
         preprocess = False,
+        preprocess_type,
         noise = True):
     
     df_train = pd.read_csv(df_train)
@@ -26,8 +28,9 @@ def get_dataloaders(
     df_test_target = getattr(df_test, target_feature_name)
 
     if preprocess:
-        df_train_sentence = df_train_sentence.apply(denoise_text)
-        df_test_sentence = df_test_sentence.apply(denoise_text)
+        preprocessor = functools.partial(denoise_text, t = preprocess_type)
+        df_train_sentence = df_train_sentence.apply(preprocessor)
+        df_test_sentence = df_test_sentence.apply(preprocess)
 
 
     data = []

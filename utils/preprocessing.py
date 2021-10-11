@@ -8,12 +8,15 @@ def strip_html(text):
 def remove_between_square_brackets(text):
     return re.sub('\[[^]]*\]', '', text)
 
-def denoise_text(text):
-    #text = strip_html(text)
-    #text = remove_between_square_brackets(text)
-    #text = remove_special_characters(text)
-    res = re.findall(r'\w+|[^\s\w]+',text)
-    return ' '.join(res)
+def denoise_text(text, t = "denoise"):
+    if t == "denoise":
+        text = strip_html(text)
+        text = remove_between_square_brackets(text)
+        text = remove_special_characters(text)
+        return text
+    elif t == "split":
+        res = re.findall(r'\w+|[^\s\w]+',text)
+        return ' '.join(res)
 
 def remove_special_characters(text, remove_digits=True):
     pattern=r'[^a-zA-z0-9ğüşöçıİĞÜŞÖÇ\s]'
