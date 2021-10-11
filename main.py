@@ -68,7 +68,7 @@ def main(args):
         batch_size = args.batch_size,
         max_len = args.max_seq_len,
         preprocess = True if args.preprocess=="true" else False,
-        preprocess_type = args.preprocess_type
+        preprocess_type = args.preprocess_type,
         noise = True if args.noise == "true" else False
     )
 
