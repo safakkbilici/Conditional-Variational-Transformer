@@ -15,7 +15,7 @@ def get_dataloaders(
         batch_size = 32,
         max_len = 200,
         preprocess = False,
-        preprocess_type,
+        preprocess_type = "denoise",
         noise = True):
     
     df_train = pd.read_csv(df_train)
