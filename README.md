@@ -75,5 +75,15 @@ python3 main.py --df_train DF_TRAIN
                         max len for generation
                 --evaluate_per_epoch EVALUATE_PER_EPOCH
                         evaluating at nth epoch
+                --model MODEL
+                        model checkpoint to load
+                --optimizer OPTIMIZER
+                        optimizer checkpoint to load
+                --model_params MODEL_PARAMS
+                        model attributes to load
+                --load_scheduler LOAD_SCHEDULER
+                        scheduler checkpoint to load
+                --noise NOISE
+                        noised input to decoder
 
 ```
