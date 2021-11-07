@@ -30,7 +30,7 @@ def get_dataloaders(
     if preprocess:
         preprocessor = functools.partial(denoise_text, t = preprocess_type)
         df_train_sentence = df_train_sentence.apply(preprocessor)
-        df_test_sentence = df_test_sentence.apply(preprocess)
+        df_test_sentence = df_test_sentence.apply(preprocessor)
 
 
     data = []
