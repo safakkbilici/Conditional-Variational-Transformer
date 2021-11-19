@@ -12,7 +12,7 @@ import json
 
 def main(args):
     if args.tokenizer == "space":
-        tokenizer = BasicTokenizer()
+        tokenizer = SpaceTokenizer()
         tokenizer.load("./tokenizer")
 
     elif args.tokenizer == "bpe":
