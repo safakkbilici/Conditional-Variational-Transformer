@@ -1,7 +1,7 @@
 from models.variational_transformer import CVAETransformer
 from models.trainer import train
-from tokenizer.basic_tokenizer import BasicTokenizer
-from tokenizer.bpe import BytePairTokenizer
+from tokenizer.space_tokenizer import BasicTokenizer
+from tokenizer.bpe_tokenizer import BytePairTokenizer
 from utils.dataloaders import get_dataloaders
 
 import torch
