@@ -1,6 +1,6 @@
 from models.variational_transformer import CVAETransformer
 from models.trainer import train
-from tokenizer.space_tokenizer import BasicTokenizer
+from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
 from utils.dataloaders import get_dataloaders
 

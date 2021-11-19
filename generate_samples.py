@@ -5,8 +5,8 @@ import json
 
 from models.variational_transformer import CVAETransformer
 from models.eval import generate
-from tokenizer.basic_tokenizer import BasicTokenizer
-from tokenizer.bpe import BytePairTokenizer
+from tokenizer.space_tokenizer import SpaceTokenizer
+from tokenizer.bpe_tokenizer import BytePairTokenizer
 
 import argparse
 
@@ -33,6 +33,7 @@ def main(args):
 
     model = CVAETransformer(**model_params)
     model.load_state_dict(torch.load(f"{args.model}"))
+    model = model.to(device)
 
     samples = generate(
         model = model,
