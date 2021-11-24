@@ -9,13 +9,28 @@ from models.masking import *
 
 class CVAETransformer(nn.Module):
     def __init__(
-            self, n_src_vocab, n_trg_vocab, src_pad_idx, trg_pad_idx,
-            d_word_vec=512, d_model=512, d_inner=2048,
-            n_layers=6, n_head=8, d_k=64, d_v=64, dropout=0.1, n_position=200,
-            trg_emb_prj_weight_sharing=True, emb_src_trg_weight_sharing=True,
-            scale_emb_or_prj='prj', enc_max_seq_len = 512, latent_size = 16):
+            self,
+            n_src_vocab,
+            n_trg_vocab,
+            src_pad_idx,
+            trg_pad_idx,
+            d_word_vec=512,
+            d_model=512,
+            d_inner=2048,
+            n_layers=6,
+            n_head=8,
+            d_k=64,
+            d_v=64,
+            dropout=0.1,
+            n_position=200,
+            trg_emb_prj_weight_sharing=True,
+            emb_src_trg_weight_sharing=True,
+            scale_emb_or_prj='prj',
+            enc_max_seq_len = 512,
+            latent_size = 16
+    ):
 
-        super().__init__()
+        super(CVAETransformer, self).__init__()
 
         self.src_pad_idx, self.trg_pad_idx = src_pad_idx, trg_pad_idx
 
@@ -25,16 +40,34 @@ class CVAETransformer(nn.Module):
         self.d_model = d_model
 
         self.encoder = Encoder(
-            n_src_vocab=n_src_vocab, n_position=n_position,
-            d_word_vec=d_word_vec, d_model=d_model, d_inner=d_inner,
-            n_layers=n_layers, n_head=n_head, d_k=d_k, d_v=d_v,
-            pad_idx=src_pad_idx, dropout=dropout, scale_emb=scale_emb)
+            n_src_vocab = n_src_vocab,
+            n_position = n_position,
+            d_word_vec = d_word_vec,
+            d_model = d_model,
+            d_inner = d_inner,
+            n_layers = n_layers,
+            n_head = n_head,
+            d_k = d_k,
+            d_v = d_v,
+            pad_idx = src_pad_idx,
+            dropout = dropout,
+            scale_emb = scale_emb
+        )
 
         self.decoder = Decoder(
-            n_trg_vocab=n_trg_vocab, n_position=n_position,
-            d_word_vec=d_word_vec, d_model=d_model, d_inner=d_inner,
-            n_layers=n_layers, n_head=n_head, d_k=d_k, d_v=d_v,
-            pad_idx=trg_pad_idx, dropout=dropout, scale_emb=scale_emb)
+            n_trg_vocab = n_trg_vocab,
+            n_position = n_position,
+            d_word_vec = d_word_vec,
+            d_model = d_model,
+            d_inner = d_inner,
+            n_layers = n_layers,
+            n_head = n_head,
+            d_k = d_k,
+            d_v = d_v,
+            pad_idx = trg_pad_idx,
+            dropout = dropout,
+            scale_emb = scale_emb
+        )
 
         self.trg_word_prj = nn.Linear(d_model, n_trg_vocab, bias=False)
         
@@ -117,6 +150,9 @@ class CVAETransformer(nn.Module):
         to_dec = self.vae_decoder(z)
         
         to_dec = to_dec.repeat(1,self.enc_max_seq_len).reshape(src_seq.size(0), self.enc_max_seq_len, -1)
+
+        # out, (hidden, cell) = self.lstm(to_dec)
+        # use out below
         
         KL_loss = (-0.5 * torch.sum(1 + std - mean.pow(2) - std.exp())) / src_seq.size(0)
         #print(to_dec.shape)

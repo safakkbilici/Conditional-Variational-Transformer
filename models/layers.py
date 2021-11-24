@@ -6,7 +6,7 @@ import numpy as np
 class ScaledDotProductAttention(nn.Module):
 
     def __init__(self, temperature, attn_dropout=0.1):
-        super().__init__()
+        super(ScaledDotProductAttention, self).__init__()
         self.temperature = temperature
         self.dropout = nn.Dropout(attn_dropout)
 
@@ -25,7 +25,7 @@ class ScaledDotProductAttention(nn.Module):
 
 class MultiHeadAttention(nn.Module):
     def __init__(self, n_head, d_model, d_k, d_v, dropout=0.1):
-        super().__init__()
+        super(MultiHeadAttention, self).__init__()
 
         self.n_head = n_head
         self.d_k = d_k
@@ -71,7 +71,7 @@ class MultiHeadAttention(nn.Module):
 
 class PositionwiseFeedForward(nn.Module):
     def __init__(self, d_in, d_hid, dropout=0.1):
-        super().__init__()
+        super(PositionwiseFeedForward, self).__init__()
         self.w_1 = nn.Linear(d_in, d_hid)
         self.w_2 = nn.Linear(d_hid, d_in)
         self.layer_norm = nn.LayerNorm(d_in, eps=1e-6)
