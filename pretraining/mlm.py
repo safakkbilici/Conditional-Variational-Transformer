@@ -14,7 +14,7 @@ def tokenize_corpus(tokenizer, corpus, max_seq_len, pad_token_id):
         try:
             seq_data.append([data[i:i+max_seq_len]])
         except:
-            pad_len = 512 - (len(data) - i)
+            pad_len = max_seq_len - (len(data) - i)
             a = [data[i:-1]] + [pad_token_id for _ in range(pad_len)]
             # break
 
