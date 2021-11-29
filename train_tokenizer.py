@@ -1,5 +1,5 @@
-from tokenizer.basic_tokenizer import BasicTokenizer
-from tokenizer.bpe import BytePairTokenizer
+from tokenizer.space_tokenizer import BasicTokenizer
+from tokenizer.bpe_tokenizer import BytePairTokenizer
 from utils.preprocessing import denoise_text
 
 import argparse
@@ -17,7 +17,7 @@ def main(args):
         df = pd.DataFrame(sentence_feature)
         
     if args.tokenizer == "space":
-        tokenizer = BasicTokenizer(
+        tokenizer = SpaceTokenizer(
             unk_token = args.unk_token,
             start_token = args.start_token,
             end_token = args.end_token,
