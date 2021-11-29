@@ -1,4 +1,4 @@
-from tokenizer.space_tokenizer import BasicTokenizer
+from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
 from utils.preprocessing import denoise_text
 
