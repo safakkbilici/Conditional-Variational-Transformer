@@ -23,10 +23,9 @@ def main(args):
             end_token = args.end_token,
             pad_token = args.pad_token,
             cased = True if args.cased == "true" else False,
-            feature_name = args.feature_name
         )
 
-        tokenizer.fit(df)
+        tokenizer.fit(df,feature_name = args.feature_name)
         tokenizer.save("./tokenizer")
 
     elif args.tokenizer == "bpe":
