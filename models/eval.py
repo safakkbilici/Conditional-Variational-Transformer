@@ -86,7 +86,7 @@ def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_cla
                         trg.append(max_prob.item())
                         trg_seq = torch.Tensor(trg)[None, :].long().to(device)
                         gen.update()
-                generated[str(i)].append(' '.join(tokenizer.decode(trg, remove_special_tokens=False)))
+                generated[str(i)].append(' '.join(tokenizer.decode(trg, remove_special_tokens=True)))
     return generated
 
 # def generate(model, device, tokenizer, latent_size, n_classes, n_samples_per_class, generate_len):
