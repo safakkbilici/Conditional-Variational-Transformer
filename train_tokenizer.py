@@ -8,8 +8,10 @@ import os
 import functools
 
 def main(args):
-    df = pd.read_csv(args.dataframe)
-    sentence_feature = getattr(df, args.feature_name)
+    df = args.dataframe
+    if args.dataframe.split(".")[-1] == "csv":
+        df = pd.read_csv(args.dataframe)
+        sentence_feature = getattr(df, args.feature_name)
     
     if args.preprocess == "true":
         preprocessor = functools.partial(denoise_text, t = args.preprocess_type)
