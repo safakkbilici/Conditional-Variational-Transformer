@@ -1,5 +1,6 @@
 from models.variational_transformer import CVAETransformer
 from pretraining.pretrainer import train
+from pretraining.denoising_lm import DenoisingLM, DenoisingLMDataset
 
 from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
