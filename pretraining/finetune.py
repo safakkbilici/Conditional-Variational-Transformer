@@ -34,7 +34,7 @@ class Freezer():
                 enc_layer_stack.append(model.encoder.layer_stack[to_freeze_enc_layers])
 
             for to_freeze_dec_layers in self.t["dec"]:
-                dec_layer_stack.append(model.dec.layer_stack[to_freeze_dec_layers])
+                dec_layer_stack.append(model.decoder.layer_stack[to_freeze_dec_layers])
 
         for child in enc_layer_stack:
             for param in child.parameters():
