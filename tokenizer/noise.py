@@ -57,7 +57,7 @@ def rotate(tokens, mask_id, prob = 15):
     return new_list
 
 
-def add_noise(tokens, mask_id, end_id, pad_id, prob = 15):
+def add_noise(tokens, mask_id, end_id, pad_id, prob_mask = 15, prob_delete = 15):
 
     max_len = len(tokens)
     start_id = tokens[0]
@@ -83,7 +83,12 @@ def add_noise(tokens, mask_id, end_id, pad_id, prob = 15):
     for i in perms_choose:
         if perms[i]:
             for f in perms[i]:
-                tokens = f(tokens, mask_id, prob)
+                if f.__name__ == "mask":
+                    tokens = f(tokens, mask_id, prob_mask)
+                elif f.__name__ == "delete":
+                    tokens = f(tokens, mask_id, prob_delete)
+                else:
+                    tokens = f(tokens, mask_id, prob_mask)
 
     new_tokens.append(start_id)
     new_tokens.extend(tokens)
