@@ -2,6 +2,7 @@ from models.variational_transformer import CVAETransformer
 from models.trainer import train
 from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
+from pretraining.finetune import Freezer
 from utils.dataloaders import get_dataloaders
 
 import torch
@@ -27,6 +28,10 @@ def main(args):
         model = CVAETransformer(**model_params)
         print(f"Model is loaded from {args.model} and {args.model_params}")
         model.load_state_dict(torch.load(args.model))
+
+    if args.pretraining == "true":
+        freezer = Freezer("last")
+        model = freezer.freeze(model)
 
 
     else:
@@ -385,6 +390,13 @@ if __name__ == "__main__":
     parser.add_argument("--noise",
                         "-no",
                         help="noised input to decoder",
+                        type = str,
+                        default = "false"
+    )
+
+    parser.add_argument("--pretraining",
+                        "-pret",
+                        help="pretraining",
                         type = str,
                         default = "false"
     )
