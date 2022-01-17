@@ -5,6 +5,8 @@ from pretraining.denoising_lm import DenoisingLM, DenoisingLMDataset
 from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
 
+from torch.utils.data import DataLoader, Dataset
+
 import torch
 import torch.nn as nn
 import argparse
