@@ -51,7 +51,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
         loss_per_word = nll_total_loss/n_word_total
         accuracy = n_word_correct/n_word_total
-        perp_total = torch.exp(loss_per_word)
+        perp_total = torch.exp(torch.Tensor([loss_per_word])).item()
 
         return accuracy, loss_per_word, kl_total_loss, perp_total
 
