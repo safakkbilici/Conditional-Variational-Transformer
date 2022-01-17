@@ -16,7 +16,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
                 src = batch["original_segment"].to(device)
                 trg = batch["noised_segment"].to(device)
-                batch_size = batch[0].size(0)
+                batch_size = batch["original_segment"].size(0)
 
                 src_seq = patch_src(src, tokenizer.pad_token_id)
                 trg_seq, gold = map(lambda x: x.to(device), patch_trg(trg, tokenizer.pad_token_id))
@@ -84,7 +84,7 @@ def train(**params):
 
                 src = batch["original_segment"].to(device)
                 trg = batch["noised_segment"].to(device)
-                batch_size = batch[0].size(0)
+                batch_size = batch["original_segment"].size(0)
 
                 src_seq = patch_src(src, tokenizer.pad_token_id)
                 trg_seq, gold = map(lambda x: x.to(device), patch_trg(trg, tokenizer.pad_token_id))
