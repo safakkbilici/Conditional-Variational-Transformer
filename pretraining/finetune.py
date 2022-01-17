@@ -45,7 +45,7 @@ class Freezer():
                 param.requires_grad = False
 
         if self.trg_word_proj:
-            for param in self.model.trg_word_prj:
+            for param in model.trg_word_prj.parameters():
                 param.reqiures_grad = False
 
         print(sum(p.numel() for p in model.parameters() if p.requires_grad))
