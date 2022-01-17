@@ -27,7 +27,7 @@ class Freezer():
         elif self.t == "all":
             enc_layer_stack = model.encoder.layer_stack
             dec_layer_stack = model.decoder.layer_stack
-        elif type(t) == dict:
+        elif type(self.t) == dict:
             enc_layer_stack = []
             dec_layer_stack = []
             for to_freeze_enc_layers in self.t["enc"]:
