@@ -27,7 +27,7 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
                 loss, n_correct, n_word = cal_performance(pred, gold, tokenizer.pad_token_id, smoothing=False)
 
-                perplexity = torch.exp(loss)
+                #perplexity = torch.exp(loss)
 
                 if args.posterior_collapse:
                     kl_weight = kl_anneal_function(
@@ -45,13 +45,13 @@ def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, 
 
                 kl_total_loss += kl_loss.item()
                 nll_total_loss += loss.item()
-                perp_total += perplexity.item()
+                #perp_total += perplexity.item()
                 
                 ee.update()
 
         loss_per_word = nll_total_loss/n_word_total
         accuracy = n_word_correct/n_word_total
-        perp_total = perp_total / len(test_dataloader)
+        perp_total = torch.exp(loss_per_word)
 
         return accuracy, loss_per_word, kl_total_loss, perp_total
 
