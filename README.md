@@ -1,4 +1,4 @@
-# Conditional (denoising) Variational Transformer
+# Class Conditional Variational Transformer
 
 Code for our paper "Transformers as Neural Augmentors: Class Conditional Sentence Generation with Variational Bayes", submitted to ICPR 2022.
 
@@ -10,10 +10,33 @@ Data augmentation for Natural Language Processing tasks are explored in recent y
 
 ```console
 python train_tokenizer.py \
-       --dataframe "trec_train.csv" \
+       --dataframe "train.csv" \
        --cased "true" \ 
        --preprocess "true" \
        --tokenizer "space" \
        --feature_name "sentence"
 ```
-Please take a look at [train_tokenizer.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/train_tokenizer.py) file if you want to configure the tokenizer.
+Please take a look at arguments in [train_tokenizer.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/train_tokenizer.py) file if you want to configure the tokenizer.
+
+## Training Class Conditional Variational Transformer
+
+```console
+python main.py \ 
+       --df_train "train.csv" \
+       --df_test "test.csv" \
+       --preprocess "true" \
+       --epochs 90 \
+       --tokenizer "space" \
+       --max_seq_len 128 \
+       --df_sentence_name "sentence" \
+       --df_target_name "target" \
+       --cuda "true" \
+       --batch_size 32 \
+       --posterior_collapse "true" \
+       --initial_learning_rate 0.0005 \
+       --noise "false" \
+       --n_classes 6 \
+       --latent_size 32
+```
+
+Please take a look at arguments in [main.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/main.py) file if you want to configure hyperparameters of proposed model's or training configuration.
