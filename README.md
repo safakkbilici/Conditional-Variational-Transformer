@@ -111,7 +111,7 @@ We implemented four finetuning procedure in [finetune.py](https://github.com/saf
 
 ```python
 if args.pretraining == "true":
-   layers = {"enc": [0, 1, 2], [1, 2, 3]} 
+   layers = {"enc": [0, 1, 2], "dec": [1, 2, 3]} 
    # freeze encoder but last MHSA, freeze decoder but first MHSA
    freezer = Freezer(layers)
    model = freezer.freeze(model)
