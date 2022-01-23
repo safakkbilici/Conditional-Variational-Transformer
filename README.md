@@ -8,6 +8,6 @@ Data augmentation for Natural Language Processing tasks are explored in recent y
 
 ## Training A Tokenizer
 
-```shell
+```console
 $ python train_tokenizer.py --dataframe "trec_train.csv" --cased "true" --preprocess "true" --tokenizer "space"
 ```
