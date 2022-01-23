@@ -9,5 +9,11 @@ Data augmentation for Natural Language Processing tasks are explored in recent y
 ## Training A Tokenizer
 
 ```console
-$ python train_tokenizer.py --dataframe "trec_train.csv" --cased "true" --preprocess "true" --tokenizer "space"
+python train_tokenizer.py \
+       --dataframe "trec_train.csv" \
+       --cased "true" \ 
+       --preprocess "true" \
+       --tokenizer "space" \
+       --feature_name "sentence"
 ```
+Please take a look at [train_tokenizer.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/train_tokenizer.py) file if you want to configure the tokenizer.
