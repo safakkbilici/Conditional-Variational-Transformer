@@ -52,3 +52,67 @@ Please use [generate.ipynb](https://github.com/safakkbilici/Conditional-Variatio
 
 ## Finetuning
 We provide finetuning scripts as well at [./benchmarks/models](https://github.com/safakkbilici/Conditional-Variational-Transformer/tree/main/benchmarks/models). However, anyone can write their own finetuning code.
+
+## Pre-training Class Conditional Variational Transformer
+We haven't experimented much our pre-training objective and code. To pre-train Class Conditional Variational Transformer, we use denoising sequence-to-sequence pre-training, which is proposed by Lewis et al., 2019. 
+
+Train a tokenizer:
+
+```console
+python train_tokenizer.py \
+       --dataframe "wiki.train.tokens" \
+       --cased "true" \
+       --preprocess "false" \
+       --tokenizer "bpe"
+```
+
+Pre-train Class Conditional Variational Transformer:
+
+```console
+python main_pretraining.py \
+       --train_corpus "wiki.train.tokens" \
+       --test_corpus "wiki.test.tokens" \
+       --batch_size 32 \
+       --epochs 150 \
+       --tokenizer "bpe" \
+       --max_seq_len 256 \
+       --latent_size 32 \
+       --initial_learning_rate 0.0005 \
+       --posterior_collapse "true" \
+```
+
+## Finetuning Class Conditional Variational Transformer
+
+After pre-training model_params.json, model.pt and optimizer.pt (scheduler.pt if used) files will be saved under main directory. Following the same training script (with a few additional arguments), you can train your pre-trained Class Conditional Variational Transformer to generate new sentences for data augmentation.
+
+```console
+python main.py \ 
+       --df_train "train.csv" \
+       --df_test "test.csv" \
+       --preprocess "true" \
+       --epochs 90 \
+       --tokenizer "space" \
+       --max_seq_len 128 \
+       --df_sentence_name "sentence" \
+       --df_target_name "target" \
+       --cuda "true" \
+       --batch_size 32 \
+       --posterior_collapse "true" \
+       --initial_learning_rate 0.0005 \
+       --noise "false" \
+       --n_classes 6 \
+       --latent_size 32 \
+       --model "model.pt" \
+       --model_params "model_params.json" \
+       --pretraining "true"
+```
+
+We implemented four finetuning procedure in [finetune.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/pretraining/finetune.py) file. However, we haven't give it as an argument in main.py file. If anybody want to freeze custom layers, please give a dictionary to constructor in main.py file:
+
+```python
+if args.pretraining == "true":
+   layers = {"enc": [0, 1, 2], [1, 2, 3]} 
+   # freeze encoder but last MHSA, freeze decoder but first MHSA
+   freezer = Freezer(layers)
+   model = freezer.freeze(model)
+```
