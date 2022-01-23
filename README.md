@@ -18,7 +18,11 @@ python train_tokenizer.py \
 ```
 Please take a look at arguments in [train_tokenizer.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/train_tokenizer.py) file if you want to configure the tokenizer.
 
+Vocab and config files of your trained tokenizer will be saved under ./tokenizer directory.
+
 ## Training Class Conditional Variational Transformer
+
+main.py will use trained tokenizer which is saved under ./tokenizer directory.
 
 ```console
 python main.py \ 
@@ -39,4 +43,12 @@ python main.py \
        --latent_size 32
 ```
 
-Please take a look at arguments in [main.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/main.py) file if you want to configure hyperparameters of proposed model's or training configuration.
+Please take a look at arguments in [main.py](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/main.py) file if you want to configure hyperparameters of proposed model's, training configuration, or load model and resume training.
+
+model_params.json, model.pt and optimizer.pt (scheduler.pt if used) files will be saved under main directory.
+
+## Generating Sentences
+Please use [generate.ipynb](https://github.com/safakkbilici/Conditional-Variational-Transformer/blob/main/notebooks/generate.ipynb) notebook to generate new sentences for data augmentation.
+
+## Finetuning
+We provide finetuning scripts as well at [./benchmarks/models](https://github.com/safakkbilici/Conditional-Variational-Transformer/tree/main/benchmarks/models). However, anyone can write their own finetuning code.
