@@ -1,5 +1,6 @@
 from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
+from tokenizer.char_ngram_tokenizer import NGramTokenizer
 from utils.preprocessing import denoise_text
 
 import argparse
@@ -47,6 +48,19 @@ def main(args):
         tokenizer.save("./tokenizer", "vocab")
 
         os.remove("./tokenizer/data.txt")
+
+    elif args.tokenizer == "ngram":
+        tokenizer = NGramTokenizer(
+            unk_token = args.unk_token,
+            start_token = args.start_token,
+            end_token = args.end_token,
+            pad_token = args.pad_token,
+            cased = True if args.cased == "true" else False,
+        )
+
+        tokenizer.fit(df)
+        tokenizer.save("./tokenizer")
+        
     else:
         raise NotImplementedError()
         

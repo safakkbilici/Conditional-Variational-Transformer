@@ -1,4 +1,4 @@
-from torchlm.tokenization.base import TokenizerBase
+from .base import TokenizerBase
 import json
 import pandas as pd
 

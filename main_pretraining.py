@@ -4,6 +4,7 @@ from pretraining.denoising_lm import DenoisingLM, DenoisingLMDataset
 
 from tokenizer.space_tokenizer import SpaceTokenizer
 from tokenizer.bpe_tokenizer import BytePairTokenizer
+from tokenizer.char_ngram_tokenizer import NGramTokenizer
 
 from torch.utils.data import DataLoader, Dataset
 
@@ -20,6 +21,9 @@ def main(args):
     elif args.tokenizer == "bpe":
         tokenizer = BytePairTokenizer()
         tokenizer.load("./tokenizer", "vocab")
+    elif args.tokenizer == "ngram":
+        tokenizer = NGramTokenizer()
+        tokenizer.load("./tokenizer")
     else:
         raise NotImplementedError()
 
