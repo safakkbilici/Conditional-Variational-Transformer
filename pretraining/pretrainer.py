@@ -4,6 +4,31 @@ import numpy as np
 from tqdm.auto import tqdm
 from utils.model_utils import *
 
+def generate(model, device, tokenizer, latent_size, generate_len, n_generate):
+    total = n_generate * (generate_len - 2)
+    model = model.to(device)
+    generated = []
+    with tqdm(total = total, leave=False, desc='Generation round', position = 0) as gen:
+        for i in range(n_generate):
+            prior = sample_from_prior(1, latent_size, device)
+            trg = [tokenizer.start_token_id, random.randint(5, tokenizer.vocab_size)]
+            trg_seq = torch.Tensor(trg)[None, :].long().to(device)
+            with torch.no_grad():
+                for step in range(2, generate_len):
+                    trg_mask = get_subsequent_mask(trg_seq)
+                    dec_output = model.generate(trg_seq, trg_mask, prior, None)
+                    gen_seq = F.softmax(model.trg_word_prj(dec_output), dim=-1).squeeze(0).squeeze(0)
+                    try:
+                        max_prob = gen_seq[-1,:].argmax(dim = -1)
+                    except:
+                        max_prob = gen_seq.argmax(dim = -1)
+                        
+                    trg.append(max_prob.item())
+                    trg_seq = torch.Tensor(trg)[None, :].long().to(device)
+                    gen.update()
+            generated.append(' '.join(tokenizer.decode(trg, remove_special_tokens=True)))
+    return generated
+
 def evaluate(model, device, criterion, test_dataloader, stepp, args, tokenizer, latent_size):
 
     total = len(test_dataloader)
@@ -130,6 +155,15 @@ def train(**params):
                     latent_size = args.latent_size
                 )
 
+                generated = generate(
+                    model = model,
+                    device = device,
+                    tokenizer = tokenizer,
+                    latent_size = args.latent_size,
+                    generate_len = 50,
+                    n_generate = 3
+                )
+
                 torch.save(model.state_dict(), "model.pt")
                 torch.save(optimizer.state_dict(), "optimizer.pt")
                 if scheduler != None:
@@ -147,6 +181,9 @@ def train(**params):
 
                 kl.append(kl_total_loss)
                 nll.append(loss_per_word)
+
+                for g in generated:
+                    print(f"  - {g}")
 
             if scheduler != None:
                 scheduler.step()
