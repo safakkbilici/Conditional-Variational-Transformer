@@ -14,7 +14,7 @@ def train(**params):
     criterion = params["criterion"]
     scheduler = params["scheduler"]
     train_dataloader = params["train_dataloader"]
-    test_dataloader = params["train_dataloader"]
+    test_dataloader = params["test_dataloader"]
     tokenizer = params["tokenizer"]
 
     args = params["args"]
