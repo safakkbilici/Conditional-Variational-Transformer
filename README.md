@@ -1,6 +1,6 @@
 # Class Conditional Variational Transformer
 
-Code for our paper "Transformers as Neural Augmentors: Class Conditional Sentence Generation with Variational Bayes", submitted to ICPR 2022.
+Code for our paper "Transformers as Neural Augmentors: Class Conditional Sentence Generation with Variational Bayes".
 
 <p align="center">
   <img src="assets/model.png"/>
